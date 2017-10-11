@@ -6,22 +6,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plenumsoft.vuzee.entities.Candidate;
-import com.plenumsoft.vuzee.repositories.ProspectusRepository;
+import com.plenumsoft.vuzee.repositories.CandidateRepository;
 
 @Service
 public class CandidateServiceImpl implements CandidateService {
-	ProspectusRepository prospectusRepository;
+	CandidateRepository candidateRepository;
 	
 		
-	public CandidateServiceImpl(ProspectusRepository prospectusRepository) {
+	public CandidateServiceImpl(CandidateRepository candidateRepository) {
 		super();
-		this.prospectusRepository = prospectusRepository;
-	
+		this.candidateRepository = candidateRepository;
+		
 	}
 	
 	@Override
 	public List<Candidate> getAll() {
-		return (List<Candidate>) this.prospectusRepository.findAll();
+		return (List<Candidate>) this.candidateRepository.findAll();
 	}
 	
 	@Override
@@ -35,7 +35,7 @@ public class CandidateServiceImpl implements CandidateService {
 		if(prospectus.getPositionApplied().length()==0)
 			throw new CandidateServiceException("No se pudo agregar la entidad" + prospectus);
 		
-		Candidate insertedCandidate = this.prospectusRepository.save(prospectus);
+		Candidate insertedCandidate = this.candidateRepository.save(prospectus);
 		if(insertedCandidate!=null)
 			return insertedCandidate.getId();
 		
