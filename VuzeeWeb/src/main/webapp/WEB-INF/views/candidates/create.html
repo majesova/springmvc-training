@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/main">
+<head>
+<title>Crear Candidato</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<section class="content-header">
+		    <h1>Crear Candidato</h1>
+		    <ol class="breadcrumb">
+		        <li><a th:href="@{/}"><i class="fa fa-dashboard"></i> Home</a></li>
+		        <li class="active">Candidatos</li>
+    		</ol>
+		</section>
+		<section class="content">
+		<form action="#" th:action="@{/candidates/create}" th:object="${candidateCreateViewModel}" method="post">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"></h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                        <div class="box-body">
+                           <div class="form-group">
+                                 <label class="control-label">Nombre</label>
+                                 <input type="text" th:field="*{name}" class="form-control" />
+                                 <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger">Error en nombre</span>
+                           </div>
+                           <div class="form-group">
+                                 <label class="control-label">Puesto al que aplica</label>
+                                 <input type="text" th:field="*{positionApplied}" class="form-control" />
+                                 <span th:if="${#fields.hasErrors('positionApplied')}" th:errors="*{positionApplied}" class="text-danger">Error en nombre</span>
+                           </div>
+                        </div>
+                        <!-- /.box-body -->
+
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-primary">
+                            <i class="ion-android-checkmark-circle"></i>Guardar</button>
+                        </div>
+                    
+                </div>
+                </div>
+                
+            </div>
+            </form>
+        </section>
+	
+	</div>
+</body>
+</html>

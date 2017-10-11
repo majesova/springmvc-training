@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/main">
+<head>
+<title>Candidates</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<section class="content-header">
+		    <h1>Candidatos</h1>
+		    <ol class="breadcrumb">
+		        <li><a th:href="@{/}"><i class="fa fa-dashboard"></i> Home</a></li>
+		        <li class="active">Candidatos</li>
+    		</ol>
+		</section>
+		
+		 <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Listado</h3>
+                    <a class="btn btn-default pull-right" th:href="@{/candidates/create}">
+                    <i class="ion-ios-plus"></i>
+                    Nuevo</a>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="data-table" class="table table-bordered table-striped">
+                        <thead>
+                            <tr >
+                                <th>Id</th>
+                                <th>Nombre</th>
+                                <th>Aplica para</th>
+                                <th>Fecha Alta</th>
+                            </tr>
+                        </thead> 
+                        <tbody>
+                            
+                                <tr th:each="candidate : ${candidates}">
+                                 <td >
+                                 <a th:href="@{/candidates/edit/__${candidate.id}__}" th:text="${candidate.id}">
+                                 </a>
+                                 </td>
+                                    <td th:text="${candidate.name}"> 
+                                    </td>
+                                    <td th:text="${candidate.positionApplied}"> 
+                                    </td>
+                                    <td th:text="${#dates.format(candidate.createdAt, 'dd-MMM-yyyy HH:ss')}">Agregado el</td>
+                                    <!-- <td>
+                                    <a href="#" target="_blank">Descargar
+                                        <i class="ion-archive"></i></a>
+                                    </td>-->
+                                </tr>
+                         
+                            
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                               <th>Id</th>
+                                <th>Nombre</th>
+                                <th>Aplica para</th>
+                                <th>Fecha Alta</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+	
+	</div>
+	<th:block layout:fragment="scripts">
+	<link rel="stylesheet" th:href="@{/resources/datatables.net-bs/css/dataTables.bootstrap.min.css}" />
+    <!-- DataTables -->
+    <script th:src="@{/resources/datatables.net/js/jquery.dataTables.min.js}"></script>
+    <script th:src="@{/resources/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+    <!-- SlimScroll -->
+    <script th:src="@{/resources/jquery-slimscroll/jquery.slimscroll.min.js}"></script>
+    <!-- FastClick -->
+    <script th:src="@{/resources/fastclick/lib/fastclick.js}"></script>
+    
+    <script type="text/javascript">
+    $(function () {
+        $('#data-table').DataTable({
+            'paging': true,
+            language: {
+            	search:"Buscar",
+            	lengthMenu:    "Mostrar _MENU_ entradas",
+            	info:   "Mostrando ( _START_ - _END_ ) de _TOTAL_ elementos",
+            	paginate: {
+                    first:      "Primero",
+                    previous:   "Anterior",
+                    next:       "Siguiente",
+                    last:       "Último"
+                }
+            }
+        })
+    })
+    </script>
+	</th:block>
+</body>
+</html>
