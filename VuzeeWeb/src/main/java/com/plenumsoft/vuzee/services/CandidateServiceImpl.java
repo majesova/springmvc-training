@@ -25,17 +25,17 @@ public class CandidateServiceImpl implements CandidateService {
 	}
 	
 	@Override
-	public Long addCandidate(Candidate prospectus) {
-		if(prospectus==null)
-			throw new CandidateServiceException("No se pudo agregar la entidad" + prospectus);
+	public Long addCandidate(Candidate candidate) {
+		if(candidate==null)
+			throw new CandidateServiceException("No se pudo agregar la entidad" + candidate);
 		
-		if(prospectus.getName().length()==0)
-			throw new CandidateServiceException("No se pudo agregar la entidad" + prospectus);
+		if(candidate.getName().length()==0)
+			throw new CandidateServiceException("No se pudo agregar la entidad" + candidate);
 		
-		if(prospectus.getPositionApplied().length()==0)
-			throw new CandidateServiceException("No se pudo agregar la entidad" + prospectus);
+		if(candidate.getPositionApplied().length()==0)
+			throw new CandidateServiceException("No se pudo agregar la entidad" + candidate);
 		
-		Candidate insertedCandidate = this.candidateRepository.save(prospectus);
+		Candidate insertedCandidate = this.candidateRepository.save(candidate);
 		if(insertedCandidate!=null)
 			return insertedCandidate.getId();
 		
