@@ -8,27 +8,65 @@
 <body>
 	<div layout:fragment="content">
 		<section class="content-header">
-		    <h1>Editar Candidato</h1>
-		    <ol class="breadcrumb">
-		        <li><a th:href="@{/}"><i class="fa fa-dashboard"></i> Home</a></li>
-		        <li class="active">Candidatos</li>
-    		</ol>
+			<h1>Editar Candidato</h1>
+			<ol class="breadcrumb">
+				<li><a th:href="@{/}"><i class="fa fa-dashboard"></i> Home</a></li>
+				<li class="active">Candidatos</li>
+			</ol>
 		</section>
 		<section class="content">
-		<pre>
-		Mostrar:
-		Id (no editable)
-		Nombre 
-		Puesto al que aplica
-		Fecha en que fué creado (No editable)
-		Quién lo creó (No editable)
-		
-		Guardar y enviar al listado
-		</pre>
-		
-		
-        </section>
-	
+			<form th:object="${candidateEditViewModel}"
+					th:method="put"
+					th:action="@{${#httpServletRequest.servletPath}}">
+					 <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"></h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                        <div class="box-body">
+                         <div class="form-group">
+                                 <label class="control-label">Identificador</label><br/>
+                                 <label th:text="*{id}"  ></label>
+                           </div>
+                           <div class="form-group">
+                                 <label class="control-label">Nombre</label>
+                                 <input type="text" th:field="*{name}" class="form-control" />
+                                 <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger">Error en nombre</span>
+                           </div>
+                           <div class="form-group">
+                                 <label class="control-label">Puesto al que aplica</label>
+                                 <input type="text" th:field="*{positionApplied}" class="form-control" />
+                                 <span th:if="${#fields.hasErrors('positionApplied')}" th:errors="*{positionApplied}" class="text-danger">Error en nombre</span>
+                           </div>
+                            <div class="form-group">
+                                 <label class="control-label">Fecha de creación</label><br/>
+                                 <label th:text="${#dates.format(candidateEditViewModel.createdAt, 'dd-MMM-yyyy HH:ss')}"></label>
+                           </div>
+                            <div class="form-group">
+                                 <label class="control-label">Creado por</label><br/>
+                                 <label th:text="${candidateEditViewModel.createdBy}" ></label>
+                           </div>
+                        </div>
+                        <!-- /.box-body -->
+
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-primary">
+                            <i class="ion-android-checkmark-circle"></i>Guardar</button>
+                        </div>
+                    
+                </div>
+                </div>
+                
+            </div>
+					 
+				</form>
+		</section>
+
 	</div>
 </body>
 </html>

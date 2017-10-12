@@ -41,6 +41,19 @@ public class CandidateServiceImpl implements CandidateService {
 		
 		return null;
 	}
+
+	@Override
+	public Candidate findById(Long id) {
+		// TODO Auto-generated method stub
+		return candidateRepository.findOne(id);
+	}
+
+	@Override
+	public void updateCandidate(Candidate candidate) {
+		// TODO Auto-generated method stub
+		candidateRepository.save(candidate);
+		
+	}
 	
 }
 

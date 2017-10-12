@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.plenumsoft.vuzee.entities.Candidate;
 import com.plenumsoft.vuzee.services.CandidateService;
 import com.plenumsoft.vuzee.viewmodels.CandidateCreateViewModel;
+import com.plenumsoft.vuzee.viewmodels.CandidateEditViewModel;
 
 @Controller
 @RequestMapping(value= {"/candidates"})
@@ -62,10 +64,26 @@ public class CandidatesController {
 		return "redirect:/"+ prefix +"/";
 	}
 	
-	@RequestMapping(value = { "/edit/{id}"})
-	public String PrepareEdit(@PathVariable("id") int id) {
-		//"id" es el id del candidato
+	@RequestMapping(value = { "/edit/{id}"}, method= RequestMethod.GET)
+	public String PrepareEdit(@PathVariable("id") Long id, Model model) {	
+		Candidate candidate = candidateService.findById(id);
+		model.addAttribute("candidateEditViewModel", candidate);
 		return prefix+"edit";
+	}
+	
+	@RequestMapping(value = { "/edit/{id}"}, method= RequestMethod.PUT)
+	public String PutEdit(@Valid CandidateEditViewModel candidateEditViewModel, BindingResult bindingResult, Model model) {
+		
+		if(bindingResult.hasErrors()) {
+			return prefix + "edit";
+		}
+		Long id = candidateEditViewModel.getId();
+		Candidate candidate = candidateService.findById(id);
+		candidate.setName(candidateEditViewModel.getName());
+		candidate.setPositionApplied(candidateEditViewModel.getPositionApplied());
+		
+		candidateService.updateCandidate(candidate);
+		return "redirect:/"+ prefix +"/";
 	}
 	
 	
