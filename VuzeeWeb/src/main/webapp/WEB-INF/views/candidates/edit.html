@@ -46,10 +46,13 @@
                             <div class="form-group">
                                  <label class="control-label">Fecha de creación</label><br/>
                                  <label th:text="${#dates.format(candidateEditViewModel.createdAt, 'dd-MMM-yyyy HH:ss')}"></label>
+                                 
+                                 <input type="hidden" th:field="*{createdAt}"></input>
                            </div>
                             <div class="form-group">
-                                 <label class="control-label">Creado por</label><br/>
-                                 <label th:text="${candidateEditViewModel.createdBy}" ></label>
+                                 <label class="control-label" th:field="">Creado por</label><br/>
+                                 <label th:text="*{createdBy}"></label><br/>
+                                 <input type="hidden" th:field="*{createdBy}"></input>
                            </div>
                         </div>
                         <!-- /.box-body -->

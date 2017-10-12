@@ -31,11 +31,12 @@
                                 <th>Nombre</th>
                                 <th>Aplica para</th>
                                 <th>Fecha Alta</th>
+                                <th>Acción</th>
                             </tr>
                         </thead> 
                         <tbody>
                             
-                                <tr th:each="candidate : ${candidates}">
+                                <tr th:each="candidate : ${candidates}" th:attr="data-id=${candidate.id}" >
                                  <td >
                                  <a th:href="@{/candidates/edit/__${candidate.id}__}" th:text="${candidate.id}">
                                  </a>
@@ -49,6 +50,11 @@
                                     <a href="#" target="_blank">Descargar
                                         <i class="ion-archive"></i></a>
                                     </td>-->
+                                    <td>
+                                     <button name="delete" class="btn btn-small btn-warning" type="button">
+                                     <i class="ion-ios-trash"></i>
+                                     </button>
+                                     </td>
                                 </tr>
                          
                             
@@ -59,6 +65,7 @@
                                 <th>Nombre</th>
                                 <th>Aplica para</th>
                                 <th>Fecha Alta</th>
+                                <th>Acción</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -77,6 +84,29 @@
     <script th:src="@{/resources/fastclick/lib/fastclick.js}"></script>
     
     <script type="text/javascript">
+    var jscontroller = (function(){
+    	var configureActions = function(){
+    		  $("button[name='delete']").on("click", function (event) {
+    			  console.log($(this).closest("tr"));
+    			  var id = $(this).closest("tr").data("id");
+                  
+				  alert(id);
+              });
+    	}
+    	  var start = function () {
+    		  
+    		  configureActions();
+    		  //Para cuando cambie la página
+    		  $(".paginate_button").on("click",function(){
+    			  configureActions();	  
+    		  }) 
+    		  
+          };
+    	return{
+    		start:start
+    	}
+    })();
+    
     $(function () {
         $('#data-table').DataTable({
             'paging': true,
@@ -92,7 +122,12 @@
                 }
             }
         })
+         
+        jscontroller.start();
+        
     })
+   
+    
     </script>
 	</th:block>
 </body>

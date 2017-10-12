@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -75,6 +76,8 @@ public class CandidatesController {
 	public String PutEdit(@Valid CandidateEditViewModel candidateEditViewModel, BindingResult bindingResult, Model model) {
 		
 		if(bindingResult.hasErrors()) {
+			model.addAttribute("candidateEditViewModel", candidateEditViewModel);
+			List<ObjectError> errors = bindingResult.getAllErrors();
 			return prefix + "edit";
 		}
 		Long id = candidateEditViewModel.getId();
