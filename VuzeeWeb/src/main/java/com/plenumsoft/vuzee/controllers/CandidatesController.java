@@ -13,7 +13,9 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.plenumsoft.vuzee.entities.Candidate;
 import com.plenumsoft.vuzee.services.CandidateService;
@@ -51,10 +53,11 @@ public class CandidatesController {
 	}
 	
 	@RequestMapping(value="/create",method=RequestMethod.POST)
-	public String PostCreateCandidate(@Valid CandidateCreateViewModel candidateCreateViewModel, BindingResult bindingResult) {
+	public String PostCreateCandidate(@Valid CandidateCreateViewModel candidateCreateViewModel, BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
 		if(bindingResult.hasErrors()) {
 			return prefix+"create";
 		}
+		try {
 		Candidate candidate = new Candidate();
 		candidate.setName(candidateCreateViewModel.getName());
 		candidate.setPositionApplied(candidateCreateViewModel.getPositionApplied());
@@ -62,6 +65,10 @@ public class CandidatesController {
 		Date now = new Date();
 		candidate.setCreatedAt(new Date());
 		candidateService.addCandidate(candidate);
+		}catch(Exception ex) {
+			redirectAttributes.addFlashAttribute("message_error",ex.getLocalizedMessage());
+		}
+		redirectAttributes.addFlashAttribute("message_success","Registro creado con éxito");
 		return "redirect:/"+ prefix +"/";
 	}
 	
@@ -73,8 +80,8 @@ public class CandidatesController {
 	}
 	
 	@RequestMapping(value = { "/edit/{id}"}, method= RequestMethod.PUT)
-	public String PutEdit(@Valid CandidateEditViewModel candidateEditViewModel, BindingResult bindingResult, Model model) {
-		
+	public String PutEdit(@Valid CandidateEditViewModel candidateEditViewModel, BindingResult bindingResult, Model model,  final RedirectAttributes redirectAttributes) {
+		try {
 		if(bindingResult.hasErrors()) {
 			model.addAttribute("candidateEditViewModel", candidateEditViewModel);
 			List<ObjectError> errors = bindingResult.getAllErrors();
@@ -86,8 +93,22 @@ public class CandidatesController {
 		candidate.setPositionApplied(candidateEditViewModel.getPositionApplied());
 		
 		candidateService.updateCandidate(candidate);
+		
+		}catch(Exception ex) {
+			redirectAttributes.addFlashAttribute("message_error", ex.getLocalizedMessage());	
+		}
+		//Solo se mantiene una petición
+		redirectAttributes.addFlashAttribute("message_success","Registro actualizado con éxito");
 		return "redirect:/"+ prefix +"/";
 	}
+	@RequestMapping(value="/delete/{id}", method=RequestMethod.DELETE)
+	@ResponseBody
+	public Candidate deleteCandidate(@PathVariable Long id) {
+		Candidate candidate = candidateService.findById(id);
+		candidateService.deleteCandidate(candidate);
+		return candidate;
+	} 
+	
 	
 	
 }

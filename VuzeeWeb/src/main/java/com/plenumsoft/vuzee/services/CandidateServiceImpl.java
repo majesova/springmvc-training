@@ -54,6 +54,12 @@ public class CandidateServiceImpl implements CandidateService {
 		candidateRepository.save(candidate);
 		
 	}
+
+	@Override
+	public void deleteCandidate(Candidate candidate) {
+			candidateRepository.delete(candidate);
+	}
+	
 	
 }
 

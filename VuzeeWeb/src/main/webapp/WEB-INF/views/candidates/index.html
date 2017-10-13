@@ -36,10 +36,9 @@
                         </thead> 
                         <tbody>
                             
-                                <tr th:each="candidate : ${candidates}" th:attr="data-id=${candidate.id}" >
-                                 <td >
-                                 <a th:href="@{/candidates/edit/__${candidate.id}__}" th:text="${candidate.id}">
-                                 </a>
+                                <tr th:each="candidate : ${candidates}" th:attr="data-id=${candidate.id}, data-name=${candidate.name}"><!-- data-id="10" -->
+                                 <td>
+                                 <a th:href="@{/candidates/edit/__${candidate.id}__}"  th:text="${candidate.id}"></a>
                                  </td>
                                     <td th:text="${candidate.name}"> 
                                     </td>
@@ -51,9 +50,13 @@
                                         <i class="ion-archive"></i></a>
                                     </td>-->
                                     <td>
-                                     <button name="delete" class="btn btn-small btn-warning" type="button">
-                                     <i class="ion-ios-trash"></i>
-                                     </button>
+                                     	<a th:href="@{/candidates/edit/__${candidate.id}__}" class="btn btn-small btn-warning" >
+                                     		<i class="ion-edit"></i>
+                                     	</a>
+                                     	<button name="delete" class="btn btn-small btn-danger" type="button">
+                                     		<i class="ion-trash-a"></i>
+                                     	</button>
+                                     
                                      </td>
                                 </tr>
                          
@@ -83,24 +86,40 @@
     <!-- FastClick -->
     <script th:src="@{/resources/fastclick/lib/fastclick.js}"></script>
     
-    <script type="text/javascript">
+    <script th:inline="javascript">
     var jscontroller = (function(){
     	var configureActions = function(){
     		  $("button[name='delete']").on("click", function (event) {
-    			  console.log($(this).closest("tr"));
-    			  var id = $(this).closest("tr").data("id");
-                  
-				  alert(id);
+    			  var self = $(this);
+    			  var tr = self.closest("tr");
+    			  var id = tr.data("id");
+    			  var name = tr.data("name");
+    			  bootbox.confirm("¿Eliminar a <b>"+ name + "</b>?", function(result) {
+    				  if(result===true){
+    					  
+    					  var options = {
+    		                        url: [[@{/candidates/delete/}]] + id, 
+    		                        type: "DELETE",
+    		                        data: null
+    		                    };
+    		                    $.ajax(options)
+    		                    .done(function( data ) {
+    		                    	  tr.fadeOut(500, function () {
+    		                          });
+    		                      });
+    					  
+    					  
+    				  }
+    				}); 
+    			  
               });
-    	}
+    		}
     	  var start = function () {
-    		  
     		  configureActions();
     		  //Para cuando cambie la página
     		  $(".paginate_button").on("click",function(){
     			  configureActions();	  
     		  }) 
-    		  
           };
     	return{
     		start:start
@@ -130,5 +149,6 @@
     
     </script>
 	</th:block>
+	
 </body>
 </html>

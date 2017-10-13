@@ -12,4 +12,5 @@ public interface CandidateService {
 	Candidate findById(Long id);
 	Long addCandidate(Candidate candidate);
 	void updateCandidate(Candidate candidate);
+	void deleteCandidate(Candidate candidate);
 }
