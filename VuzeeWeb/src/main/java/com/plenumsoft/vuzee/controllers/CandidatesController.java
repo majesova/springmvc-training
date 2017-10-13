@@ -68,7 +68,7 @@ public class CandidatesController {
 		try 
 		{
 			Candidate candidate = new Candidate();
-			if(file!=null) {
+			if(file.getBytes().length>0) {
 				String mimeType = file.getContentType();
 				byte[] fileBytes = file.getBytes();
 				String fileExtension = FilenameUtils.getExtension(file.getOriginalFilename());
@@ -120,7 +120,7 @@ public class CandidatesController {
 		Candidate candidate = candidateService.findById(id);
 		candidate.setName(candidateEditViewModel.getName());
 		candidate.setPositionApplied(candidateEditViewModel.getPositionApplied());
-		if(file!=null) {
+		if(file.getBytes().length>0) {
 			String mimeType = file.getContentType();
 			byte[] fileBytes = file.getBytes();
 			String fileExtension = FilenameUtils.getExtension(file.getOriginalFilename());

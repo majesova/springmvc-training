@@ -120,12 +120,22 @@
     			  
               });
     		}
+    	
+    	var unbindActions = function(){
+    		$("button[name='delete']").unbind("click");
+    	};
     	  var start = function () {
     		  configureActions();
     		  //Para cuando cambie la página
     		  $(".paginate_button").on("click",function(){
+    			  unbindActions();
     			  configureActions();	  
-    		  }) 
+    		  })
+    		  
+    		  $("select[name='data-table_length']").on("change", function(){
+    			  unbindActions();
+    			  configureActions();
+    		  });
           };
     	return{
     		start:start
