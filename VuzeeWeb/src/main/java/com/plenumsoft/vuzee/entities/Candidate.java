@@ -1,6 +1,7 @@
 package com.plenumsoft.vuzee.entities;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,6 +18,12 @@ public class Candidate {
 	private String positionApplied;
 	private Date createdAt;
 	private String createdBy;
+	@Column(name="cv_file")
+	private byte[] cvFile;
+	@Column(name="cv_mime_type")
+	private String cvMimeType;
+	@Column(name="cv_extension")
+	private String cvExtension;
 	
 	public Long getId() {
 		return id;
@@ -47,5 +54,23 @@ public class Candidate {
 	}
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
+	}
+	public byte[] getCvFile() {
+		return cvFile;
+	}
+	public void setCvFile(byte[] cvFile) {
+		this.cvFile = cvFile;
+	}
+	public String getCvMimeType() {
+		return cvMimeType;
+	}
+	public void setCvMimeType(String cvMimeType) {
+		this.cvMimeType = cvMimeType;
+	}
+	public String getCvExtension() {
+		return cvExtension;
+	}
+	public void setCvExtension(String cvExtension) {
+		this.cvExtension = cvExtension;
 	}
 }

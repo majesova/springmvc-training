@@ -31,6 +31,7 @@
                                 <th>Nombre</th>
                                 <th>Aplica para</th>
                                 <th>Fecha Alta</th>
+                                <th>Currículum</th>
                                 <th>Acción</th>
                             </tr>
                         </thead> 
@@ -49,6 +50,11 @@
                                     <a href="#" target="_blank">Descargar
                                         <i class="ion-archive"></i></a>
                                     </td>-->
+                                     <td>
+                                    <a th:href="@{/candidates/cv/__${candidate.id}__}" target="_blank" th:if="${candidate.cvMimeType}">Descargar
+                                        <i class="ion-archive"></i>
+                                        </a>
+                                    </td>
                                     <td>
                                      	<a th:href="@{/candidates/edit/__${candidate.id}__}" class="btn btn-small btn-warning" >
                                      		<i class="ion-edit"></i>
@@ -68,6 +74,7 @@
                                 <th>Nombre</th>
                                 <th>Aplica para</th>
                                 <th>Fecha Alta</th>
+                                <th>Currículum</th>
                                 <th>Acción</th>
                             </tr>
                         </tfoot>
@@ -107,7 +114,6 @@
     		                    	  tr.fadeOut(500, function () {
     		                          });
     		                      });
-    					  
     					  
     				  }
     				}); 

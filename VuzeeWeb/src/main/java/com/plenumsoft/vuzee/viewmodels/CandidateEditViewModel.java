@@ -19,6 +19,8 @@ public class CandidateEditViewModel {
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
 	private Date createdAt;
 	
+	private Boolean hasFile;
+	
 	private String createdBy;
 
 	public Long getId() {
@@ -59,5 +61,13 @@ public class CandidateEditViewModel {
 
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
+	}
+
+	public Boolean getHasFile() {
+		return hasFile;
+	}
+
+	public void setHasFile(Boolean hasFile) {
+		this.hasFile = hasFile;
 	}
 }

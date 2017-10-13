@@ -15,7 +15,7 @@
     		</ol>
 		</section>
 		<section class="content">
-		<form action="#" th:action="@{/candidates/create}" th:object="${candidateCreateViewModel}" method="post">
+		<form action="#" enctype="multipart/form-data" th:action="@{/candidates/create}" th:object="${candidateCreateViewModel}" method="post">
         <div class="row">
             <!-- left column -->
             <div class="col-md-12">
@@ -36,6 +36,10 @@
                                  <label class="control-label">Puesto al que aplica</label>
                                  <input type="text" th:field="*{positionApplied}" class="form-control" />
                                  <span th:if="${#fields.hasErrors('positionApplied')}" th:errors="*{positionApplied}" class="text-danger">Error en nombre</span>
+                           </div>
+                           <div class="form-group">
+                                 <label class="control-label">Currículum</label>
+                                 <input type="file" name="file"></input>
                            </div>
                         </div>
                         <!-- /.box-body -->
