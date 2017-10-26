@@ -18,25 +18,30 @@ import javax.persistence.Table;
 @Table(name="tasks")
 public class Task {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Column(name="task_date")
 	private Date taskDate;
 	
+	@Column(name="has_rating")
 	private boolean hasRating;
 	
 	private Date createdAt;
 	
 	private String createdBy;
 	
-	@Enumerated(EnumType.STRING)
-	@Column(name="task_type")
-	private TaskType taskType;
+	@Enumerated(EnumType.ORDINAL)
+	@Column(name="task_state")
+	private TaskState taskState;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="candidate_id")
 	private Candidate candidate;
+	
+	private String instructions;
 
+	private String title;
+	
 	public Long getId() {
 		return id;
 	}
@@ -77,12 +82,12 @@ public class Task {
 		this.createdBy = createdBy;
 	}
 
-	public TaskType getTaskType() {
-		return taskType;
+	public TaskState getTaskState() {
+		return taskState;
 	}
 
-	public void setTaskType(TaskType taskType) {
-		this.taskType = taskType;
+	public void setTaskState(TaskState taskState) {
+		this.taskState = taskState;
 	}
 
 	public Candidate getCandidate() {
@@ -91,5 +96,21 @@ public class Task {
 
 	public void setCandidate(Candidate candidate) {
 		this.candidate = candidate;
+	}
+
+	public String getInstructions() {
+		return instructions;
+	}
+
+	public void setInstructions(String instructions) {
+		this.instructions = instructions;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 }

@@ -8,13 +8,14 @@
 <body>
 	<div layout:fragment="content">
 		<section class="content-header">
-		    <h1>Crear Candidato</h1>
+		    <h1>Crear Candidato </h1>
 		    <ol class="breadcrumb">
 		        <li><a th:href="@{/}"><i class="fa fa-dashboard"></i> Home</a></li>
 		        <li class="active">Candidatos</li>
     		</ol>
 		</section>
 		<section class="content">
+		        
 		<form action="#" enctype="multipart/form-data" th:action="@{/candidates/create}" th:object="${candidateCreateViewModel}" method="post">
         <div class="row">
             <!-- left column -->

@@ -1,6 +1,6 @@
 package com.plenumsoft.vuzee.entities;
 
-public enum TaskType {
+public enum TaskState {
 	PENDING,
 	INPROGRESS,
 	DONE

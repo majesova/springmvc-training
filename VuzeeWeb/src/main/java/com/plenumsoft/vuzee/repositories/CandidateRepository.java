@@ -2,13 +2,12 @@ package com.plenumsoft.vuzee.repositories;
 
 import java.util.List;
 
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
-
 import com.plenumsoft.vuzee.entities.Candidate;
 
-
-@Repository
-public interface CandidateRepository extends CrudRepository<Candidate, Long> {
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public interface CandidateRepository extends CrudRepository<Candidate, Long>, CandidateRepositoryCustom {
 	List<Candidate> findByName(String name);
 }

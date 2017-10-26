@@ -1,6 +1,5 @@
 package com.plenumsoft.vuzee.controllers;
 
-import java.io.ByteArrayOutputStream;
 import java.util.Date;
 import java.util.List;
 
@@ -10,8 +9,7 @@ import javax.validation.Valid;
 
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,43 +23,58 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.plenumsoft.vuzee.VuzeeConstants;
 import com.plenumsoft.vuzee.entities.Candidate;
+import com.plenumsoft.vuzee.security.AuthenticatedUser;
+import com.plenumsoft.vuzee.security.CurrentUser;
 import com.plenumsoft.vuzee.services.CandidateService;
+import com.plenumsoft.vuzee.services.CandidateServiceException;
 import com.plenumsoft.vuzee.viewmodels.CandidateCreateViewModel;
 import com.plenumsoft.vuzee.viewmodels.CandidateEditViewModel;
+/*
+
+@PostAuthorize("hasAuthority('FOO_READ_PRIVILEGE')")
+
+@PostAuthorize("hasPermission(returnObject, 'read')")
+
+@PreAuthorize("hasPermission(#id, 'Foo', 'read')")*/
 
 @Controller
 @RequestMapping(value= {"/candidates"})
 public class CandidatesController {
-	String prefix = "candidates/";
+	String prefix = VuzeeConstants.CandidatesControllerPrefix;;
 	
 	private CandidateService candidateService;
 	
-	
 	public CandidatesController() {
 	}
-	
-	@Autowired
+
+	@Autowired	
 	public CandidatesController(CandidateService candidateService) {
 		super();
 		this.candidateService = candidateService;
 	}
 	
 	@RequestMapping(value = { "/", "" })
-	public ModelAndView Index() {
+	@PreAuthorize("hasPermission(#id, 'CANDIDATES', 'READ')")
+	public ModelAndView Index(@CurrentUser AuthenticatedUser user, HttpServletRequest request) {
+		Long id = user.getId();
 		ModelAndView mv = new ModelAndView(prefix +"index");
 		List<Candidate> candidates= candidateService.getAll();
+		boolean hasPermission = user.hasPrivilege("CANDIDATES", "READ");
 		mv.addObject("candidates", candidates);
 		return mv;
 	}
 	
 	@RequestMapping(value = { "/create"})
+	@PreAuthorize("hasPermission(#id, 'CANDIDATES', 'WRITE')")
 	public String PrepareCreate(CandidateCreateViewModel candidateCreateViewModel) {
 		return prefix+"create";
 	}
 	
 	@RequestMapping(value="/create",method=RequestMethod.POST)
-	public String PostCreateCandidate(@Valid CandidateCreateViewModel candidateCreateViewModel, BindingResult bindingResult, final RedirectAttributes redirectAttributes, @RequestParam("file") MultipartFile file) {
+	@PreAuthorize("hasPermission(#id, 'CANDIDATES', 'WRITE')")
+	public String PostCreateCandidate(@Valid CandidateCreateViewModel candidateCreateViewModel, BindingResult bindingResult, @CurrentUser AuthenticatedUser user, final RedirectAttributes redirectAttributes, @RequestParam("file") MultipartFile file) {
 		if(bindingResult.hasErrors()) {
 			return prefix+"create";
 		}
@@ -78,10 +91,9 @@ public class CandidatesController {
 			}	
 		candidate.setName(candidateCreateViewModel.getName());
 		candidate.setPositionApplied(candidateCreateViewModel.getPositionApplied());
-		candidate.setCreatedBy("msoberanis");//TODO: hard-code
+		candidate.setCreatedBy(user.getUsername());
 		Date now = new Date();
 		candidate.setCreatedAt(new Date());
-		
 		candidateService.addCandidate(candidate);
 		}catch(Exception ex) {
 			redirectAttributes.addFlashAttribute("message_error",ex.getLocalizedMessage());
@@ -91,6 +103,7 @@ public class CandidatesController {
 	}
 	
 	@RequestMapping(value = { "/edit/{id}"}, method= RequestMethod.GET)
+	@PreAuthorize("hasPermission(#id, 'CANDIDATES', 'MODIFY')")
 	public String PrepareEdit(@PathVariable("id") Long id, Model model, final RedirectAttributes redirectAttributes) {	
 		Candidate candidate = candidateService.findById(id);
 		if(candidate!=null) {
@@ -109,6 +122,7 @@ public class CandidatesController {
 	}
 	
 	@RequestMapping(value = { "/edit/{id}"}, method= RequestMethod.PUT)
+	@PreAuthorize("hasPermission(#id, 'CANDIDATES', 'MODIFY')")
 	public String PutEdit(@Valid CandidateEditViewModel candidateEditViewModel, BindingResult bindingResult, Model model,  final RedirectAttributes redirectAttributes, @RequestParam("file") MultipartFile file) {
 		try {
 		if(bindingResult.hasErrors()) {
@@ -130,15 +144,20 @@ public class CandidatesController {
 		}	
 		candidateService.updateCandidate(candidate);
 		
-		}catch(Exception ex) {
+		}catch(CandidateServiceException ex) {
+			
+		}
+		catch(Exception ex) {
 			redirectAttributes.addFlashAttribute("message_error", ex.getLocalizedMessage());	
 		}
 		//Solo se mantiene una petición
 		redirectAttributes.addFlashAttribute("message_success","Registro actualizado con éxito");
 		return "redirect:/"+ prefix +"/";
 	}
+	
 	@RequestMapping(value="/delete/{id}", method=RequestMethod.DELETE)
 	@ResponseBody
+	@PreAuthorize("hasPermission(#id, 'CANDIDATES', 'DELETE')")
 	public Candidate deleteCandidate(@PathVariable Long id) {
 		Candidate candidate = candidateService.findById(id);
 		candidateService.deleteCandidate(candidate);
@@ -162,6 +181,7 @@ public class CandidatesController {
 			}
 			
 		}catch(Exception ex) {
+			
 		}
 		
 	}

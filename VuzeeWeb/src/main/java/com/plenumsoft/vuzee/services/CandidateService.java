@@ -1,5 +1,6 @@
 package com.plenumsoft.vuzee.services;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -13,4 +14,5 @@ public interface CandidateService {
 	Long addCandidate(Candidate candidate);
 	void updateCandidate(Candidate candidate);
 	void deleteCandidate(Candidate candidate);
+	List<Candidate> getAllCandidatesSortedByName();
 }

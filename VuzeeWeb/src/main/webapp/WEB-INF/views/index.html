@@ -7,11 +7,29 @@
 </head>
 <body>
 	<div layout:fragment="content">
-		<h1>Este es el dashboard</h1>
-		<pre>
-		Aquí se debe mostrar un resumen 
-		con el número de tareas que tiene un candidato
-		</pre>
+		<div th:each="stat:${stats}" class="col-md-4">
+		<div class="panel panel-success">
+			<div class="panel-heading">
+				<h4 th:text="${stat.candidateName}"></h4>
+			</div>
+  			<div class="panel-body">
+  					<ul class="list-group">
+					  <li class="list-group-item">
+					  	<span class="label label-warning" th:text="${stat.numberOfPending}"></span>&nbsp;Pendientes</li>
+					  
+					  <li class="list-group-item">
+					  	<span class="label label-primary" th:text="${stat.numberOfInProgress}"></span>&nbsp;En progreso</li>
+					  
+					  <li class="list-group-item">
+					  	<span class="label label-success" th:text="${stat.numberOfDone}"></span>&nbsp;Terminados</li>
+					  
+					</ul>
+  			</div>
+  			
+		</div>
+	</div>
+
+		
 	</div>
 </body>
 </html>

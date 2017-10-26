@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/noauth">
+<head>
+<title>Login</title>
+</head>
+<body>
+	<div layout:fragment="content">
+	
+	<div th:if="${param.error}" class="alert alert-error">    
+                    Usuario y password no válidos
+	</div>
+	<div th:if="${param.logout}" class="alert alert-success"> 
+    	Se ha cerrado la sesión
+	</div>
+		<form th:action="@{/account/login}" method="post" th:object="${authenticationUser}" >
+		<div class="container col-xs-12 col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6 col-lg-offset-4 col-lg-4">
+            <br />
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h5  th:text="#{loginToYourAccount}">Login to Your Account</h5>		
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="glyphicon glyphicon-user" style="width: auto"></i>
+                            </span>
+                            <input type="text" name="username"  class="form-control" th:placeholder="#{email}" />
+								<div class="error-container has-error"> 
+							<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error-message help-block">Incorrect email</span>
+						</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="glyphicon glyphicon-lock" style="width:auto"></i>
+                            </span>
+                            <input type="password" class="form-control" name="password" th:placeholder="#{pwd}"/>
+                            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error-message help-block">Incorrect email</span>
+                        </div>
+                    </div>
+                    <button th:text="#{login}" id="btnLogin" class="btn btn-default" style="width: 100%">
+                        ENTRAR<i class="glyphicon glyphicon-log-in"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+		
+		
+		</form>
+	</div>
+</body>
+</html>
